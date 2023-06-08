@@ -1,58 +1,49 @@
-* {
+*{
     margin: 0;
     padding: 0;
     font-family: Poppins;
-    }
-    
-    header {
+}
+header{
     background-color: #0054A5;
-    height: 140px;
-    position: relative;
-    }
-    
-    body {
+    height: 187.5px;
+    position: auto;
+}
+body{
     background: white;
-    }
-    
-    .logo {
+}
+.logo{
     width: 250px;
     height: 200px;
-    cursor: pointer;
-    margin-left: 60px;
-    }
-
-    
-    .navbar {
-    width: 100%;
+    cursor: pointer; 
+    margin-left: 10px;
+}
+.navbar{
+    width: 95%;
     height: 100px;
     margin: auto;
     padding: 20px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #0054A5;
-    }
-    
-    .navbar ul li:hover {
-    background-color: #0054A5;
-    }
-    
-    .navbar ul li {
+    background-color: #0054A5; /* added background color */
+}
+.navbar ul li:hover {
+    background-color: #0054A5; /* added background color */
+}
+.navbar ul li{
     list-style: none;
     display: inline-block;
     margin: 0 20px;
     font-family: Poppins;
     position: relative;
-    }
-    
-    .navbar ul li a {
+}
+.navbar ul li a{
     color: white;
     text-transform: uppercase;
     text-decoration: none;
     font-size: 120%;
-    }
-    
-    .navbar ul li::after {
+}
+.navbar ul li::after{
     content: '';
     height: 3px;
     width: 0;
@@ -61,17 +52,15 @@
     bottom: -2px;
     background: white;
     transition: 0.5s;
-    }
-    
-    .navbar ul li:hover::after {
-    width: 100%;
-    }
-    
-    .navbar ul li:nth-child(6):hover {
+}
+.navbar ul li:hover::after{
+   width: 100%;
+}
+.navbar ul li:nth-child(6):hover {
     background-color: #0054A5;
-    }
-    
-    .overview p{
+}
+
+.overview p{
     margin: auto;
     font-weight: 100;
     text-align: justify;
@@ -80,8 +69,8 @@
     margin-right: 5%;
     background-color: white;
     color: black;
-    }
-    .overview h1{
+}
+.overview h1{
     font-size: 40px;
     margin-bottom: 30px;
     font-weight: lighter;
@@ -89,16 +78,16 @@
     background-color: white;
     color: black;
     margin-top: -50;
-    }
-    .landmark h1{
+}
+.landmark h1{
     font-size: 40px;
     margin-bottom: 30px;
     font-weight: lighter;
     text-align: center;
     background-color: white;
     color: black;
-    }
-    .landmark p{
+}
+.landmark p{
     margin: 20px auto;
     font-weight: 100;
     text-align: justify;
@@ -107,16 +96,16 @@
     margin-right: 5%;
     background-color: white;
     color: black;
-    }
-    .site h1{
+}
+.site h1{
     font-size: 40px;
     margin-bottom: 30px;
     font-weight: lighter;
     text-align: center;
     background-color: white;
     color: black;
-    }
-    .site p{
+}
+.site p{
     margin: 20px auto;
     font-weight: 100;
     text-align: justify;
@@ -125,26 +114,26 @@
     margin-right: 5%;
     background-color: white;
     color: black;
-    }
-    .dropdown {
+}
+.dropdown {
     display: none;
     position: absolute;
     z-index: 1;
     margin-top: 5px;
-    }
-    
-    li:hover .dropdown {
+}
+
+li:hover .dropdown {
     display: block;
-    }
-    
-    .dropdown li {
+}
+
+.dropdown li {
     display: block;
-    }
-    .user{
+}
+.user{
     width: 30px;
     height: 30px;
     margin-left: 3px;
     margin-right: 20px;
     vertical-align: middle;
     color: white;
-    }
+}

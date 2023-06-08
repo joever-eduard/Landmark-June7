@@ -46,7 +46,7 @@ $routes->get('documents', 'PagesController::documents');
 $routes->get('documents/view/(:num)', 'PagesController::viewlot/$1');
 $routes->get('documents/delete/(:num)', 'PagesController::deleteDocument/$1'); // Add this route
 $routes->get('documents/download/(:num)', 'PagesController::downloadDocument/$1'); // Add this route
-$routes->get('documents/view/(:segment)', 'PagesController::viewDocument/$1');
+$routes->get('documents/view/(:segment)', 'PagesController::viewFile/$1');
 $routes->get('reports', 'PagesController::reports');
 $routes->match(['get', 'post'], 'land/add', 'PagesController::add');
 $routes->match(['get', 'post'], 'land/update/(:num)', 'PagesController::update/$1');

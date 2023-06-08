@@ -14,6 +14,7 @@ use Config\Pager as PagerConfig;
 use Config\Services;
 use CodeIgniter\View\View;
 use CodeIgniter\Files\File;
+use Config\Mimes;
 use CodeIgniter\Files\Exceptions\FileNotFoundException;
 
 
@@ -297,7 +298,7 @@ class PagesController extends BaseController
     $validationRules = [
         'lot_no' => 'required|numeric|is_unique[lot_details.lot_no]',
         'cad_no' => 'numeric',
-        'size_of_area' => 'required|regex_match[/^\d{6} meters$/]',
+        'size_of_area' => 'required|regex_match[/^\d{1,6} meters$/]',
         'location' => 'required|alpha_numeric',
         'phase' => 'regex_match[/^[a-zA-Z0-9\s]{1,12}$/]',
         'land_owner' => 'required|max_length[18]',
@@ -312,6 +313,7 @@ class PagesController extends BaseController
     
     $validationMessages = [
         'lot_no' => [
+            'is_unique' => 'The Lot Number must be unique to the database.',
             'required' => 'The Lot Number field is required.',
             'numeric' => 'The Lot Number field must be numeric.',
         ],
@@ -410,17 +412,25 @@ class PagesController extends BaseController
 
             // Handle file upload
             $file = $this->request->getFile('fileToUpload');
-            if ($file && $file->isValid() && !$file->hasMoved()) {
-                $newName = $file->getRandomName();
 
-                if ($file->move(WRITEPATH . 'uploads', $newName)) {
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                // Specify the destination folder for file upload
+                $uploadPath = './uploads/';
+
+                // Get the original name of the uploaded file
+                $originalName = $file->getClientName();
+
+                // Generate a unique name for the file
+                $newName = uniqid() . '_' . $originalName;
+
+                if ($file->move($uploadPath, $newName)) {
                     // File uploaded successfully, now save the details in the database
                     $documentModel = new DocumentModel();
 
                     $data = [
                         'lot_id' => $lotId,
-                        'file_name' => $file->getName(),
-                        'original_name' => $file->getClientName(),
+                        'file_name' => $newName,
+                        'original_name' => $originalName,
                         'upload_date' => date('Y-m-d H:i:s'),
                         'file_path' => 'uploads/' . $newName
                     ];
@@ -428,6 +438,7 @@ class PagesController extends BaseController
                     $documentModel->insert($data);
                 }
             }
+
 
             // Pass the new land detail to the view
             $data['lot_no'] = $newData['lot_no'];
@@ -474,14 +485,15 @@ public function update($lotId)
     $data['propertyDistance'] = $propertyDistance;
     $data['propertyValuation'] = $propertyValuation;
 
-    if ($this->request->getMethod() == 'post') {
+    if ($this->request->getMethod() === 'post') {
         $validationRules = [
             'cad_no' => 'numeric',
-            'size_of_area' => 'required|regex_match[/^\d{6} meters$/]',
+            'size_of_area' => 'required|regex_match[/^\d{1,6} meters$/]',
             'location' => 'required|alpha_numeric',
             'phase' => 'regex_match[/^[a-zA-Z0-9\s]{1,12}$/]',
             'land_owner' => 'required|max_length[18]',
             'status' => 'required|in_list[Active,Inactive,active,inactive]',
+            'propertyDistances.*.bllm' => 'numeric|max_length[7]',
             'propertyDistances.*.distance_to_point1' => 'regex_match[/^\d{1,9} meters$/]',
             'propertyValuations.*.valuation_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
             'propertyValuations.*.tree_valuation_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
@@ -515,6 +527,10 @@ public function update($lotId)
                 'required' => 'The Status field is required.',
                 'in_list' => 'The selected Status is invalid.',
             ],
+            'propertyDistances.*.bllm' => [
+                'numeric' => 'The BLLM field must be numeric.',
+                'max_length' => 'The BLLM field cannot exceed 7 characters.',
+            ],
             'propertyDistances.*.distance_to_point1' => [
                 'regex_match' => 'The Distance to Point 1 field must be a numeric value followed by "meters".',
             ],
@@ -545,41 +561,119 @@ public function update($lotId)
             ];
             $lotModel->update($lotId, $lotData);
 
+            
             // Save the updated property distances
             $propertyDistanceData = [];
+            $updatePropertyDistanceData = [];
+            $addPropertyDistanceData = [];
             $propertyDistances = $this->request->getPost('propertyDistances');
             if (!empty($propertyDistances)) {
                 foreach ($propertyDistances as $distance) {
-                    $propertyDistanceData[] = [
-                        'id' => $distance['id'],
-                        'lot_id' => $lotId,
-                        'distance_to_point1' => $distance['distance_to_point1'],
-                        // Add other distance fields here
-                    ];
+                    if(!empty($distance['id'])){
+                        $updatePropertyDistanceData[] = [
+                            'id' => $distance['id'],
+                            'lot_id' => $lotId,
+                            'bllm' => $distance['bllm'],
+                            'distance_to_point1' => $distance['distance_to_point1'],
+                            // Add other distance fields here
+                        ];
+                    } else {
+                        $addPropertyDistanceData[] = [
+                            'id' => $distance,
+                            'lot_id' => $lotId,
+                            'bllm' => $distance['bllm'],
+                            'distance_to_point1' => $distance['distance_to_point1'],
+                        ];
+                    }
+                        
                 }
-                $propertyDistanceModel->updateBatch($propertyDistanceData, 'id');
+                
+                
+                foreach ($addPropertyDistanceData as $distance) {
+                    $propertyDistanceModel->save([
+                        'lot_id' => $lotId,
+                        'bllm' => $distance['bllm'],
+                        'distance_to_point1' => $distance['distance_to_point1'],
+                    ]);
+                }
+                $propertyDistanceModel->updateBatch($updatePropertyDistanceData, 'id');
             }
 
             // Save the updated property valuations
-            $propertyValuationData = [];
-            $propertyValuations = $this->request->getPost('propertyValuations');
-            if (!empty($propertyValuations)) {
-                foreach ($propertyValuations as $valuation) {
-                    $propertyValuationData[] = [
-                        'id' => $valuation['id'],
+                $propertyValuationData = [];
+                $updatePropertyValuationData = [];
+                $addPropertyValuationData = [];
+                $propertyValuations = $this->request->getPost('propertyValuations');
+                if (!empty($propertyValuations)) {
+                    foreach ($propertyValuations as $valuation) {
+                        if(!empty($valuation['id'])){
+                            $updatePropertyValuationData[] = [
+                                'id' => $valuation['id'],
+                                'lot_id' => $lotId,
+                                'valuation_amount' => $valuation['valuation_amount'],
+                                'tree_valuation_amount' => $valuation['tree_valuation_amount'],
+                                'disturbance_amount' => $valuation['disturbance_amount'],
+                                'house_structure_amount' => $valuation['house_structure_amount'],
+                                // Add other valuation fields here
+                            ];
+                        } else {
+                        $addPropertyValuationData[] = [
+                            'id' => $valuation['id'],
+                            'lot_id' => $lotId,
+                            'valuation_amount' => $valuation['valuation_amount'],
+                            'tree_valuation_amount' => $valuation['tree_valuation_amount'],
+                            'disturbance_amount' => $valuation['disturbance_amount'],
+                            'house_structure_amount' => $valuation['house_structure_amount'],
+                        ];
+                    }
+                }
+
+                foreach ($addPropertyValuationData as $valuation) {
+                    $propertyValuationModel->save([
                         'lot_id' => $lotId,
                         'valuation_amount' => $valuation['valuation_amount'],
                         'tree_valuation_amount' => $valuation['tree_valuation_amount'],
                         'disturbance_amount' => $valuation['disturbance_amount'],
                         'house_structure_amount' => $valuation['house_structure_amount'],
-                        // Add other valuation fields here
-                    ];
+                    ]);
                 }
-                $propertyValuationModel->updateBatch($propertyValuationData, 'id');
+                $propertyValuationModel->updateBatch($updatePropertyValuationData, 'id');
             }
 
+            // Handle file upload
+            $file = $this->request->getFile('fileToUpload');
+
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                // Specify the destination folder for file upload
+                $uploadPath = './uploads/';
+
+                // Get the original name of the uploaded file
+                $originalName = $file->getClientName();
+
+                // Generate a unique name for the file
+                $newName = uniqid() . '_' . $originalName;
+
+                if ($file->move($uploadPath, $newName)) {
+                    // File uploaded successfully, now save the details in the database
+                    $documentModel = new DocumentModel();
+
+                    $data = [
+                        'lot_id' => $lotId,
+                        'file_name' => $newName,
+                        'original_name' => $originalName,
+                        'upload_date' => date('Y-m-d H:i:s'),
+                        'file_path' => 'uploads/' . $newName
+                    ];
+
+                    $documentModel->insert($data);
+                }
+            }
+
+
+            
+
             // Redirect to the lot list page or show success message
-            return redirect()->to('/documents/')->with('success', 'Lot updated successfully.');
+            return redirect()->back()->with('success', 'Lot updated successfully.');
         } else {
             // Validation failed, show error messages
             $data['validation'] = $this->validator;
@@ -619,62 +713,53 @@ public function update($lotId)
         $lotModel->delete($id);
 
         // Redirect back to the land details page with success message
-        return redirect()->to('/documents')->with('success', 'Lot deleted successfully.');
+        return redirect()->back()->with('success', 'Lot deleted successfully.');
     }
 
     public function deleteDocument($id)
-    {
-        $documentModel = new DocumentModel();
-        $document = $documentModel->find($id);
+{
+    $documentModel = new DocumentModel();
+    $document = $documentModel->find($id);
 
-        if (!$document) {
-            // Handle document not found error
-            return redirect()->to('/documents')->with('error', 'Document not found');
-        }
-
-        $filePath = WRITEPATH . 'uploads/' . $document['file_name'];
-
-        if (is_file($filePath) && file_exists($filePath)) {
-            unlink($filePath);
-            $documentModel->delete($id);
-
-            // Redirect to the documents page with success message
-            return redirect()->to('/documents')->with('success', 'Document deleted successfully');
-        } else {
-            // Handle file not found error
-            return redirect()->to('/documents')->with('error', 'File not found');
-        }
+    if (!$document) {
+        // Handle document not found error
+        return redirect()->to('/documents')->with('error', 'Document not found');
     }
 
+    $filePath = './uploads/' . $document['file_name'];
 
-    public function viewDocument($fileName)
-{
-    $uploadsPath = WRITEPATH . 'uploads/';
+    if (is_file($filePath) && file_exists($filePath)) {
+        unlink($filePath);
+        $documentModel->delete($id);
 
-    // Get the actual file path using the original file name
-    $filePath = $uploadsPath . $fileName;
-
-    try {
-        $file = new File($filePath);
-
-        if ($file->isFile()) {
-            $mime = $file->getMimeType();
-
-            header('Content-Type: ' . $mime);
-            header('Content-Disposition: inline; filename="' . $file->getOriginalName() . '"');
-            header('Content-Length: ' . $file->getSize());
-
-            readfile($filePath);
-            exit();
-        } else {
-            // File not found, redirect back with an error message
-            return redirect()->back()->withInput()->with('error', 'File not found.');
-        }
-    } catch (FileNotFoundException $e) {
-        // File not found, redirect back with an error message
-        return redirect()->back()->withInput()->with('error', 'File not found.');
+        // Redirect to the documents page with success message
+        return redirect()->back()->with('success', 'Document deleted successfully.');
+    } else {
+        // Handle file not found error
+        return redirect()->back()->with('error', 'File not found');
     }
 }
+
+
+
+
+    public function viewFile($fileName)
+    {
+        $filePath = './uploads/' . $fileName;
+
+        // Check if the file exists
+        if (file_exists($filePath)) {
+            $data = file_get_contents($filePath);
+            $response = $this->response
+                ->setStatusCode(200)
+                ->setContentType('application/pdf')
+                ->setBody($data);
+            return $response;
+        } else {
+            // File not found, redirect or display an error message
+            return redirect()->back()->with('error', 'File not found.');
+        }
+    }
 
 
 
@@ -689,7 +774,7 @@ public function update($lotId)
             return redirect()->back()->with('error', 'Document not found.');
         }
 
-        $filePath = WRITEPATH . 'uploads/' . $document['file_name'];
+        $filePath = './uploads/' . $document['file_name'];
 
         if (file_exists($filePath)) {
             return $this->response->download($filePath, null);

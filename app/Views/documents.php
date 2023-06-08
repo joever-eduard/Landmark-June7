@@ -21,7 +21,7 @@
                 <img src="/assets/images/user.png" alt="Profile" class="user">
             </a>
             <ul class="dropdown">
-                <li><a href="/homepage" onclick="logout()">Logout</a></li>
+                <li><a href="/" onclick="logout()">Logout</a></li>
             </ul>
         </li>
     </ul>

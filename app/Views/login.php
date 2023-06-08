@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="wrapper">
-            <h1>Login</h1>
+            <h1>Login for Admin Users ONLY!</h1>
             <?php if (session()->get('success')): ?>
                 <div class="alert alert-success" role="alert">
                     <?= session()->get('success') ?>

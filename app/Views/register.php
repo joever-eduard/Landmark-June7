@@ -7,13 +7,13 @@
     </head>
     <body>
         <div class="wrapper">
-            <h1>Sign Up</h1>
+            <h1>Sign Up Page for Admin Users ONLY!</h1>
             <form method="post" action="/register">
                 <input type="text" name="username" placeholder="Username" value="<?= set_value('username') ?>">
                 <input type="email" name="email" placeholder="Email" value="<?= set_value('email')?>">
                 <input type="password" name="password" placeholder="Password" value="<?= set_value('password')?>">
                 <input type="password" name="password_confirm" placeholder="Re-enter Password">
-                <input type="text" name="invitation_code" placeholder="Invitation Code" value="<?= set_value('invitation_code') ?>">
+                <input type="password" name="invitation_code" placeholder="Access Code" value="<?= set_value('invitation_code') ?>">
             
                 <?php if (isset($validation)): ?>
                     <div class='col-12'>
