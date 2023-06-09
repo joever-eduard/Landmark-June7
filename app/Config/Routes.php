@@ -57,6 +57,9 @@ $routes->get('ownernumber', 'PagesController::ownernumber');
 $routes->get('lotowned', 'PagesController::lotowned');
 $routes->get('totaldoc', 'PagesController::totaldoc');
 $routes->get('totalarea', 'PagesController::totalarea');
+$routes->get('locationrep', 'PagesController::locationrep');
+
+
 
 
 

@@ -91,9 +91,17 @@ th, td {
 }
 
 th {
-  background-color: #0054A5;
-  color: white;
-  font-weight: bold;
+  text-align: left;
+  background-color: #f2f2f2;
+  padding: 8px;
+}
+
+th[colspan="4"] {
+  text-align: center;
+}
+
+th:last-child {
+  border-right: none;
 }
 
 tr:nth-child(even) {

@@ -58,6 +58,13 @@
                             <p id="total-no-paper"><?php echo $totalArea; ?> Sqm</p>
                         </a>
                     </div>
+
+                    <div class="report-box">
+                    <h3>Lots located in Miagao </h3> 
+                        <a href="/locationrep">
+                        <p id="total-no-paper"><?php echo $totalLocations; ?></p>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="table-container">

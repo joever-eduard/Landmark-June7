@@ -3,7 +3,7 @@
         <title>
             Reports
         </title>
-        <link rel="stylesheet" href="/assets/css/totalarea.css">
+        <link rel="stylesheet" href="/assets/css/lotowned.css">
         <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     </head>
     <body>
@@ -62,40 +62,37 @@
                     <div class="report-box">
                         <h3>Lots located in Miagao </h3> 
                         <a href="/locationrep">
-                        <p id="total-no-paper"><?php echo $totalLocations; ?></p>
+                        <p id="total-no-paper"><?php echo $totalLocationsCount; ?></p>
                         </a>
                     </div>
                 </div>
 
+                
+            
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="3">Total Area owned by Land Owners: <?php echo $totalArea; ?> Sqm</th>
+                                <th colspan="2">Total Locations: <?php echo $totalLocationsCount; ?></th>
                             </tr>
                             <tr>
-                                <th>Land Owner</th>
-                                <th>Lot Number</th>
-                                <th>Total Area</th>
+                                <th>Locations</th>
+                                <th>Lots located in the location</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($ownerLots as $ownerName => $associatedLots): ?>
-                                <?php $lotCount = count($associatedLots); ?>
-                                <?php foreach ($associatedLots as $index => $lot): ?>
-                                    <tr>
-                                        <?php if ($index === 0): ?>
-                                            <td rowspan="<?php echo $lotCount; ?>"><?php echo $ownerName; ?></td>
-                                        <?php endif; ?>
-                                        <td><?php echo $lot['lot_no']; ?></td>
-                                        <td><?php echo $totalAreas[$ownerName][$lot['lot_no']] . " Sqm"; ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
+                            <?php foreach ($locations as $location): ?>
+                                <tr>
+                                    <td><?php echo $location['location']; ?></td>
+                                    <td>
+                                        <?php foreach ($location['lots'] as $lot): ?>
+                                            <?php echo $lot['lot_no']; ?><br>
+                                        <?php endforeach; ?>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
-            </main>
-        </div>
     </body>
 </html>

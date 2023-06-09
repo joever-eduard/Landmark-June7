@@ -22,7 +22,7 @@ body {
 }
 
 .navbar {
-  width: 100%;
+  width: 95%;
   height: 100px;
   margin: auto;
   padding: 20px 0;
@@ -30,38 +30,6 @@ body {
   align-items: center;
   justify-content: space-between;
   background-color: #0054A5;
-}
-
-.navbar ul {
-  position: relative;
-}
-.navbar .dropdown {
-  display: none;
-  position: absolute;
-  z-index: 1;
-  top: 100%;
-  left: -50px;
-  margin-top: 5px;
-  padding: 10px;
-  background-color: #0054A5;
-}
-.navbar li:hover .dropdown {
-  display: block;
-}
-.navbar .user {
-  width: 30px;
-  height: 30px;
-  margin-left: 3px;
-  margin-right: 0;
-}
-.navbar .logout-link {
-  color: white;
-  text-decoration: none;
-  padding: 5px;
-}
-
-.navbar .logout-link:hover {
-  background-color: #003977;
 }
 
 .navbar ul li:hover {
@@ -81,7 +49,6 @@ body {
   text-transform: uppercase;
   text-decoration: none;
   font-size: 120%;
-  padding-right: 25px;
 }
 
 .navbar ul li::after {
@@ -113,12 +80,11 @@ body {
 table {
   border-collapse: collapse;
   width: 100%;
-  margin: 0 auto;
+  max-width: 100%;
+  table-layout: auto;
 }
 
-
-th,
-td {
+th, td {
   text-align: left;
   padding: 10px;
   vertical-align: top;
@@ -132,6 +98,10 @@ th {
 
 tr:nth-child(even) {
   background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
 }
 
 a.view-link {
@@ -153,23 +123,11 @@ a.edit-link:hover {
 }
 
 .table-container {
-  margin: 50px auto;
-  display: inline-block;
-  text-align: center;
-  display: table;
-  width: 90%;
-}
-
-.table-container table {
-  border-collapse: collapse;
-  max-width: 50%;
-}
-
-.table-container table,
-.table-container th,
-.table-container td {
   border: 1px solid black;
+  max-width: 800px; /* Adjust the maximum width as needed */
+  margin: 20px auto;
 }
+
 .dropdown {
   display: none;
   position: absolute;
@@ -225,14 +183,13 @@ main {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   padding: 20px;
   margin: 10px;
-  flex: 1;
+  flex: 1 1 400px; /* Flex properties changed to limit to 4 boxes per row */
   display: flex;
   flex-direction: column;
   align-items: left;
   border-radius: 10px;
   box-sizing: border-box;
   color: white;
-  width: 400px;
 }
 
 .report-box h3 {

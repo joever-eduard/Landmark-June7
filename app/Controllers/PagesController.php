@@ -252,35 +252,6 @@ class PagesController extends BaseController
 
 
     public function reports()
-    {
-        $lotModel = new LotModel();
-        $documentModel = new DocumentModel();
-    
-        // Get the total area of all the lots
-        $totalArea = $lotModel->db->query('SELECT SUM(size_of_area) AS total_area FROM lot_details')->getRow()->total_area;
-    
-        // Get the total number of lots
-        $totalLot = $lotModel->countAll();
-        $totalDocs = $documentModel->countAll();
-    
-        // Get the total number of land owners
-        $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
-    
-        // Get the list of owner names
-        $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
-    
-        // Pass the calculated values and owner names to the view
-        $data['totalArea'] = $totalArea;
-        $data['totalLot'] = $totalLot + $totalDocs;
-        $data['totalLotNoDoc'] = $totalLot;
-        $data['totalDocs'] = $totalDocs;
-        $data['totalLandOwners'] = $totalLandOwners;
-        $data['ownerNames'] = $ownerNames;
-    
-        return view('reports', $data);
-    }
-
-    public function ownernumber()
 {
     $lotModel = new LotModel();
     $documentModel = new DocumentModel();
@@ -295,6 +266,9 @@ class PagesController extends BaseController
     // Get the total number of land owners
     $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
 
+    // Get the count of distinct locations
+    $totalLocations = $lotModel->distinct()->select('location')->countAllResults();
+
     // Get the list of owner names
     $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
 
@@ -304,10 +278,46 @@ class PagesController extends BaseController
     $data['totalLotNoDoc'] = $totalLot;
     $data['totalDocs'] = $totalDocs;
     $data['totalLandOwners'] = $totalLandOwners;
+    $data['totalLocations'] = $totalLocations;
+    $data['ownerNames'] = $ownerNames;
+
+    return view('reports', $data);
+}
+
+
+public function ownernumber()
+{
+    $lotModel = new LotModel();
+    $documentModel = new DocumentModel();
+
+    // Get the total area of all the lots
+    $totalArea = $lotModel->db->query('SELECT SUM(size_of_area) AS total_area FROM lot_details')->getRow()->total_area;
+
+    // Get the total number of lots
+    $totalLot = $lotModel->countAll();
+    $totalDocs = $documentModel->countAll();
+
+    // Get the total number of land owners
+    $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the count of distinct lots located in Miagao
+    $totalLocations = $lotModel->distinct()->select('location')->countAllResults();
+
+    // Get the list of owner names
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+
+    // Pass the calculated values and owner names to the view
+    $data['totalArea'] = $totalArea;
+    $data['totalLot'] = $totalLot;
+    $data['totalLotNoDoc'] = $totalLot;
+    $data['totalDocs'] = $totalDocs;
+    $data['totalLandOwners'] = $totalLandOwners;
+    $data['totalLocations'] = $totalLocations;
     $data['ownerNames'] = $ownerNames;
 
     return view('ownernumber', $data);
 }
+
 
 public function lotowned()
 {
@@ -323,6 +333,9 @@ public function lotowned()
 
     // Get the total number of land owners
     $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the count of distinct lots located in Baybay Sur
+    $totalLocations = $lotModel->distinct()->select('location')->countAllResults();
 
     // Get the list of owner names
     $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
@@ -340,17 +353,12 @@ public function lotowned()
     $data['totalLotNoDoc'] = $totalLot;
     $data['totalDocs'] = $totalDocs;
     $data['totalLandOwners'] = $totalLandOwners;
+    $data['totalLocations'] = $totalLocations;
     $data['ownerNames'] = $ownerNames;
     $data['totalLot'] = $totalLot;
     $data['ownerLots'] = $ownerLots;
 
-    // Pass the associated lots to the view
-    $data['associatedLots'] = [];
-    foreach ($ownerNames as $ownerName) {
-        $associatedLots = $lotModel->where('land_owner', $ownerName['land_owner'])->findAll();
-        $data['associatedLots'][$ownerName['land_owner']] = $associatedLots;
-    }
-
+    // Load the view and pass the data to it
     return view('lotowned', $data);
 }
 
@@ -365,6 +373,9 @@ public function totalarea()
 
     // Get the total number of land owners
     $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the count of distinct lots located in Baybay Sur
+    $totalLocations = $lotModel->distinct()->select('location')->countAllResults();
 
     // Get the list of owner names
     $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
@@ -400,6 +411,7 @@ public function totalarea()
     $data['totalLotNoDoc'] = $totalLot;
     $data['totalDocs'] = $totalDocs;
     $data['totalLandOwners'] = $totalLandOwners;
+    $data['totalLocations'] = $totalLocations;
     $data['ownerNames'] = $ownerNames;
     $data['totalLot'] = $totalLot;
     $data['ownerLots'] = $ownerLots;
@@ -419,6 +431,9 @@ public function totaldoc()
 
     // Get the total number of land owners
     $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the count of distinct lots located in Baybay Sur
+    $totalLocations = $lotModel->distinct()->select('location')->countAllResults();
 
     // Get the list of owner names
     $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
@@ -452,6 +467,7 @@ public function totaldoc()
     $data['totalLotNoDoc'] = $totalLot;
     $data['totalDocs'] = $totalDocs;
     $data['totalLandOwners'] = $totalLandOwners;
+    $data['totalLocations'] = $totalLocations;
     $data['ownerNames'] = $ownerNames;
     $data['totalLot'] = $totalLot;
     $data['ownerLots'] = $ownerLots;
@@ -459,6 +475,8 @@ public function totaldoc()
 
     return view('totaldoc', $data);
 }
+
+
     public function documents()
     {
         $lotModel = new LotModel();
@@ -491,10 +509,10 @@ public function totaldoc()
         'status' => 'in_list[Active,Inactive,active,inactive]',
         'distance.0.bllm' => 'numeric|max_length[7]',
         'distance.0.distance_to_point1' => 'regex_match[/^\d{1,9} meters$/]',
-        'valuation.0.valuation_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
-        'valuation.0.tree_valuation_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
-        'valuation.0.disturbance_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
-        'valuation.0.house_structure_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
+        'valuation.0.valuation_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
+        'valuation.0.tree_valuation_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
+        'valuation.0.disturbance_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
+        'valuation.0.house_structure_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
     ];
     
     $validationMessages = [
@@ -531,16 +549,16 @@ public function totaldoc()
             'regex_match' => 'The Distance to Point 1 field must be numeric followed by "meters".',
         ],
         'valuation.0.valuation_amount' => [
-            'regex_match' => 'The Valuation amount field must start with "PHP " followed by up to 10 digits (with optional comma).',
+            'regex_match' => 'The House Structure Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
         ],
         'valuation.0.tree_valuation_amount' => [
-            'regex_match' => 'The Tree valuation amount field must start with "PHP " followed by up to 10 digits (with optional comma).',
+            'regex_match' => 'The House Structure Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
         ],
         'valuation.0.disturbance_amount' => [
-            'regex_match' => 'The Disturbance amount field must start with "PHP " followed by up to 10 digits (with optional comma).',
+            'regex_match' => 'The House Structure Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
         ],
         'valuation.0.house_structure_amount' => [
-            'regex_match' => 'The House structure amount field must start with "PHP " followed by up to 10 digits (with optional comma).',
+            'regex_match' => 'The House Structure Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
         ],
     ];
     
@@ -924,9 +942,6 @@ public function update($lotId)
     }
 }
 
-
-
-
     public function viewFile($fileName)
     {
         $filePath = './uploads/' . $fileName;
@@ -944,9 +959,6 @@ public function update($lotId)
             return redirect()->back()->with('error', 'File not found.');
         }
     }
-
-
-
 
     public function downloadDocument($documentId)
     {
@@ -967,7 +979,67 @@ public function update($lotId)
         }
     }
 
+    
+    public function locationrep()
+{
+    $lotModel = new LotModel();
+    $documentModel = new DocumentModel();
 
+    // Get the total area of all the lots
+    $totalArea = $lotModel->db->query('SELECT SUM(size_of_area) AS total_area FROM lot_details')->getRow()->total_area;
+
+    // Get the total number of lots
+    $totalLot = $lotModel->countAll();
+    $totalDocs = $documentModel->countAll();
+
+    // Get the total number of land owners
+    $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the count of distinct lots located in Baybay Sur
+    $totalLotsInBaybaySur = $lotModel->distinct()->where('location', 'Baybay Sur')->countAllResults();
+
+    // Get the list of owner names
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+
+    $ownerLots = [];
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+    foreach ($ownerNames as $ownerName) {
+        $associatedLots = $lotModel->where('land_owner', $ownerName['land_owner'])->findAll();
+        $ownerLots[$ownerName['land_owner']] = $associatedLots;
+    }
+
+    // Get the count of distinct locations
+    $totalLocationsCount = $lotModel->distinct()->select('location')->countAllResults();
+
+    // Get the distinct locations and their associated lots
+    $locations = [];
+    $distinctLocations = $lotModel->distinct()->select('location')->findAll();
+    foreach ($distinctLocations as $location) {
+        $associatedLots = $lotModel->distinct()->select('lot_no')->where('location', $location['location'])->findAll();
+        $locations[] = [
+            'location' => $location['location'],
+            'lots' => $associatedLots
+        ];
+    }
+
+    // Pass the calculated values and owner names to the view
+    $data['totalArea'] = $totalArea;
+    $data['totalLot'] = $totalLot + $totalDocs;
+    $data['totalLotNoDoc'] = $totalLot;
+    $data['totalDocs'] = $totalDocs;
+    $data['totalLandOwners'] = $totalLandOwners;
+    $data['totalLotsInBaybaySur'] = $totalLotsInBaybaySur;
+    $data['ownerNames'] = $ownerNames;
+    $data['totalLot'] = $totalLot;
+    $data['ownerLots'] = $ownerLots;
+    $data['totalLocationsCount'] = $totalLocationsCount;
+    $data['locations'] = $locations;
+
+    return view('locationrep', $data);
+}
+
+    
+    
     
 }
  

@@ -58,6 +58,13 @@
                         <p id="total-no-paper"><?php echo $totalArea; ?> Sqm</p>
                         </a>
                     </div>
+
+                    <div class="report-box">
+                        <h3>Lots located in Miagao </h3> 
+                        <a href="/locationrep">
+                        <p id="total-no-paper"><?php echo $totalLocations; ?></p>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="table-container">
@@ -73,30 +80,25 @@
                             </tr>
                         </thead>
                         <tbody>
-    <?php foreach ($ownerLots as $ownerName => $associatedLots): ?>
-        <?php foreach ($associatedLots as $lot): ?>
-            <?php $uploadedFiles = $lot['uploaded_files']; ?>
-            <tr>
-                <td><?php echo $ownerName; ?></td>
-                <td><?php echo $lot['lot_no']; ?></td>
-                <td>
-                    <?php if (!empty($uploadedFiles)): ?>
-                        <?php foreach ($uploadedFiles as $file): ?>
-                            <a href="<?php echo $file['file_path']; ?>" target="_blank"><?php echo $file['file_name']; ?></a><br>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        No file uploaded
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    <?php endforeach; ?>
-</tbody>
-
-
-
-
-
+                            <?php foreach ($ownerLots as $ownerName => $associatedLots): ?>
+                                <?php foreach ($associatedLots as $lot): ?>
+                                    <?php $uploadedFiles = $lot['uploaded_files']; ?>
+                                    <tr>
+                                        <td><?php echo $ownerName; ?></td>
+                                        <td><?php echo $lot['lot_no']; ?></td>
+                                        <td>
+                                            <?php if (!empty($uploadedFiles)): ?>
+                                                <?php foreach ($uploadedFiles as $file): ?>
+                                                    <a href="<?php echo $file['file_path']; ?>" target="_blank"><?php echo $file['file_name']; ?></a><br>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                No file uploaded
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </tbody>
                     </table>
                 </div>
             </main>
