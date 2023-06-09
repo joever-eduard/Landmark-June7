@@ -7,7 +7,7 @@
     </head>
     <body>
         <div class="wrapper">
-            <h1>Sign Up Page for Admin Users ONLY!</h1>
+            <h1>Sign Up Page for Admin Users with Access Code ONLY!</h1>
             <form method="post" action="/register">
                 <input type="text" name="username" placeholder="Username" value="<?= set_value('username') ?>">
                 <input type="email" name="email" placeholder="Email" value="<?= set_value('email')?>">
