@@ -3,9 +3,11 @@
     <title>LandMark System</title>
     <link rel="stylesheet" href="/assets/css/adminhome.css">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <header>
+<div class="container">
     <div class="navbar">
         <img src="/assets/images/icon2.png" class="logo">
         <ul>
@@ -24,6 +26,7 @@
                 </ul>
             </li>
         </ul>
+    </div>
     </div>
 </header>
 

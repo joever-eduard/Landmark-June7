@@ -1,168 +1,263 @@
 * {
-    margin: 0;
-    padding: 0;
-    font-family: Poppins;
-  }
-  
-  header {
-    background-color: #0054A5;
-    height: 140px;
-    position: relative;
-  }
-  
-  body {
-    background: white;
-    margin: 0;
-  }
-  
-  .logo {
-    width: 250px;
-    height: 200px;
-    cursor: pointer;
-    margin-left: 60px;
-  }
-  
-  .clickable-row {
-    cursor: pointer;
-  }
-  
-  .navbar {
-    width: 100%;
-    height: 100px;
-    margin: auto;
-    padding: 20px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #0054A5;
-  }
-  
-  .navbar ul li:hover {
-    background-color: #0054A5;
-  }
-  
-  .navbar ul li {
-    list-style: none;
-    display: inline-block;
-    margin: 0 20px;
-    font-family: Poppins;
-    position: relative;
-  }
-  
-  .navbar ul li a {
-    color: white;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-size: 120%;
-  }
-  
-  .navbar ul li::after {
-    content: '';
-    height: 3px;
-    width: 0;
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    background: white;
-    transition: 0.5s;
-  }
-  
-  .navbar ul li:hover::after {
-    width: 100%;
-  }
-  
-  .navbar ul li:nth-child(6):hover {
-    background-color: #0054A5;
-  }
-.homepage{
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    text-align: center;
-    color: white;
-    background: white;
+  margin: 0;
+  padding: 0;
+  font-family: Poppins;
 }
-.homepage h1{
-    font-size: 70px;
-    margin-top: 80px;
-    font-weight: bold;
-    background-color: white;
-    color: black;
+
+header {
+  background-color: #0054A5;
+  height: 140px;
+  position: relative;
 }
-.homepage h2{
-    font-size: 50px;
-    margin-bottom: 30px;
-    font-weight: lighter;
-    background-color: white;
-    color: black;
+
+body {
+  background: white;
+  margin: 0;
 }
-.homepage p{
-    margin: 20px auto;
-    font-weight: 100;
-    text-align: justify;
-    text-justify: inter-word;
-    margin-left: 5%;
-    margin-right: 5%;
-    background-color: white;
-    color: black;
+
+.logo {
+  width: 250px;
+  height: 200px;
+  cursor: pointer;
+  margin-left: 60px;
 }
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.navbar {
+  width: 100%;
+  height: 100px;
+  margin: auto;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0054A5;
+}
+
+.navbar ul {
+  position: relative;
+}
+.navbar .dropdown {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: -50px;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #0054A5;
+}
+.navbar li:hover .dropdown {
+  display: block;
+}
+.navbar .user {
+  width: 30px;
+  height: 30px;
+  margin-left: 3px;
+  margin-right: 0;
+}
+.navbar .logout-link {
+  color: white;
+  text-decoration: none;
+  padding: 5px;
+}
+
+.navbar .logout-link:hover {
+  background-color: #003977;
+}
+
+.navbar ul li:hover {
+  background-color: #0054A5;
+}
+
+.navbar ul li {
+  list-style: none;
+  display: inline-block;
+  margin: 0 20px;
+  font-family: Poppins;
+  position: relative;
+}
+
+.navbar ul li a {
+  color: white;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 120%;
+  padding-right: 25px;
+}
+
+.navbar ul li::after {
+  content: '';
+  height: 3px;
+  width: 0;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  background: white;
+  transition: 0.5s;
+}
+
+.navbar ul li:hover::after {
+  width: 100%;
+}
+
+.navbar ul li:nth-child(6):hover {
+  background-color: #0054A5;
+}
+
+.homepage {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: white;
+  background: white;
+}
+
+.homepage h1 {
+  font-size: 70px;
+  margin-top: 80px;
+  font-weight: bold;
+  background-color: white;
+  color: black;
+}
+
+.homepage h2 {
+  font-size: 50px;
+  margin-bottom: 30px;
+  font-weight: lighter;
+  background-color: white;
+  color: black;
+}
+
+.homepage p {
+  margin: 20px auto;
+  font-weight: 100;
+  text-align: justify;
+  text-justify: inter-word;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color: white;
+  color: black;
+}
+
 button {
-    border-radius: 25px;
-    background-color: #0054A5;
-    border: none;
-    color: white;
-    text-align: center;
-    font-size: 19px;
-    padding: 20px;
-    width: 300px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 5px;
+  border-radius: 25px;
+  background-color: #0054A5;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 19px;
+  padding: 20px;
+  width: 300px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
 }
+
 button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
 }
-  
+
 button span:after {
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
 }
-  
+
 button:hover span {
-    padding-right: 25px;
+  padding-right: 25px;
 }
-  
+
 button:hover span:after {
-    opacity: 1;
-    right: 0;
+  opacity: 1;
+  right: 0;
 }
+
 .dropdown {
-    display: none;
-    position: absolute;
-    z-index: 1;
-    margin-top: 5px;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  margin-top: 5px;
 }
 
 li:hover .dropdown {
-    display: block;
+  display: block;
 }
 
 .dropdown li {
-    display: block;
-}
-.user {
-    width: 30px;
-    height: 30px;
-    margin-left: 3px;
-    margin-right: 20px;
-    vertical-align: middle;
-    color: white;
+  display: block;
 }
 
+.user {
+  width: 30px;
+  height: 30px;
+  margin-left: 3px;
+  margin-right: 20px;
+  vertical-align: middle;
+  color: white;
+}
+
+/* Media Queries for responsiveness */
+
+/* Tablet screens */
+@media (max-width: 768px) {
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
+  .homepage h1 {
+    font-size: 50px;
+  }
+  .homepage h2 {
+    font-size: 40px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 480px) {
+  .logo {
+    width: 120px;
+    height: 90px;
+    margin-left: 20px;
+  }
+  .navbar ul {
+    display: none;
+  }
+  .navbar .logo {
+    margin-left: 20px;
+  }
+  .navbar .user {
+    margin-right: 20px;
+  }
+  .navbar .dropdown {
+    display: block;
+  }
+  .navbar .dropdown li {
+    margin: 10px 0;
+  }
+  .homepage h1 {
+    font-size: 40px;
+    margin-top: 50px;
+  }
+  .homepage h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+  .homepage p {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  button {
+    width: 250px;
+  }
+}

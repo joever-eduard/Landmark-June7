@@ -53,6 +53,10 @@ $routes->match(['get', 'post'], 'land/update/(:num)', 'PagesController::update/$
 $routes->get('land/delete/(:num)', 'PagesController::delete/$1');
 $routes->get('map', 'PagesController::map');
 $routes->get('adminmap', 'PagesController::adminmap');
+$routes->get('ownernumber', 'PagesController::ownernumber');
+$routes->get('lotowned', 'PagesController::lotowned');
+$routes->get('totaldoc', 'PagesController::totaldoc');
+$routes->get('totalarea', 'PagesController::totalarea');
 
 
 

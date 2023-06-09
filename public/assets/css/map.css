@@ -1,108 +1,349 @@
 *{
-    margin: 0;
-    padding: 0;
-    font-family: Poppins;
+  margin: 0;
+  padding: 0;
+  font-family: Poppins;
 }
 
 header{
-    background-color: #0054A5;
-    height: 140px;
-    position: auto;
+  background-color: #0054A5;
+  height: 140px;
+  position: auto;
 }
 
 body{
-    background: white;
+  background: white;
 }
 
 .logo{
-    width: 250px;
-    height: 200px;
-    cursor: pointer; 
-    margin-left: 10px;
+  width: 250px;
+  height: 200px;
+  cursor: pointer; 
+  margin-left: 50px;
+  margin-top: 10px;
 }
 
 .navbar{
-    width: 95%;
-    height: 100px;
-    margin: auto;
-    padding: 20px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #0054A5;
+  width: 95%;
+  height: 100px;
+  margin: auto;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0054A5;
 }
 
 .navbar ul li:hover {
-    background-color: #0054A5;
+  background-color: #0054A5;
 }
 
 .navbar ul li{
-    list-style: none;
-    display: inline-block;
-    margin: 0 20px;
-    font-family: Poppins;
-    position: relative;
+  list-style: none;
+  display: inline-block;
+  margin: 0 20px;
+  font-family: Poppins;
+  position: relative;
 }
 
 .navbar ul li a{
-    color: white;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-size: 120%;
+  color: white;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 120%;
 }
 
 .navbar ul li::after{
-    content: '';
-    height: 3px;
-    width: 0;
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    background: white;
-    transition: 0.5s;
+  content: '';
+  height: 3px;
+  width: 0;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  background: white;
+  transition: 0.5s;
 }
 
 .navbar ul li:hover::after{
-   width: 100%;
+ width: 100%;
 }
 
 .navbar ul li:nth-child(6):hover {
-    background-color: #0054A5;
+  background-color: #0054A5;
 }
 
 .dropdown {
-    display: none;
-    position: absolute;
-    z-index: 1;
-    margin-top: 5px;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  margin-top: 5px;
 }
 
 li:hover .dropdown {
-    display: block;
+  display: block;
 }
 
 .dropdown li {
-    display: block;
+  display: block;
 }
 
 .user {
-    width: 30px;
-    height: 30px;
-    margin-left: 3px;
-    margin-right: 20px;
-    vertical-align: middle;
-    color: white;
+  width: 30px;
+  height: 30px;
+  margin-left: 3px;
+  margin-right: 20px;
+  vertical-align: middle;
+  color: white;
 }
 
-#map-container {
-    width: 100%;
-    max-width: 800px; /* Adjust the maximum width as per your requirements */
-    margin: 20px auto; /* Add margin to center the map vertically */
-    padding: 20px;
+
+
+.lot:hover{
+  fill: black;
+  opacity: 50%;
+  transition: fill 0.4s;
 }
 
-#map {
-    width: 100%;
-    height: 400px; /* Adjust the height as per your requirements */
-    border: 1px solid #ddd; /* Add border to the map */
+
+.style{
+width: 50%;
+}
+
+.virtual-page h1{
+  text-align: center;
+  color: #0054A5;
+  padding: 10px 0;
+  background-color: rgb(255, 252, 99, 0.5);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.container1{
+  margin-top: 33px;
+}
+
+
+
+.container{
+padding: 20px;
+border: 2px solid black;
+position: relative;
+}
+.inside-container {
+  margin: 50px;
+  border: 1px solid black;
+  position: relative;
+}
+
+.inside-container img {
+width: 100%;
+height: 100%;
+position: relative;
+}
+
+
+/*    SVG viewing     */
+
+.back-button{
+margin-left: 85%;
+font-size: 50px;  
+margin-bottom: -10%;  
+position: absolute;
+z-index: 20;
+}
+
+
+.details {
+position: absolute;
+bottom: 0;
+left: 0;
+width: 200px;
+height: 200px;
+background-color: rgba(0, 0, 0, 0.8);
+color: white;
+display: none;
+padding: 10px;
+}
+
+.show-details {
+display: block;
+}
+
+a:hover path{
+fill: purple;
+opacity: 50%;
+stroke-width: 3px;
+transition: fill 0.4s;
+}
+
+rect:hover path{
+fill: purple;
+opacity: 50%;
+stroke-width: 3px;
+transition: fill 0.4s;
+}
+
+
+
+
+/* CSS for the Map */
+
+.interactive-map {
+padding: 3rem;
+color: #00AB99 !important;
+}
+
+.interactive-map h2 {
+font-weight: normal;
+text-align: center;
+margin-top: 2vh;
+color: #00AB99 !important;
+}
+svg{
+margin-left: 20%;
+}
+.interactive-map svg {
+/* margin-top: -5vh; */
+width: 100%;
+height: 85vh;
+/* margin-left: 5vw; */
+/* -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+-webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+-webkit-perspective: 1000px;
+      perspective: 1000px; */
+position: relative;
+}
+.interactive-map .hotspot {
+cursor: pointer;
+padding: 20px;
+}
+
+
+.interactive-map .text-info {
+background: #23272D;
+padding: 20px;
+width: 300px;
+margin: auto;
+border: 1px solid #00AB99;
+position: absolute;
+color: #00AB99 !important;
+bottom: 30%;
+left: 17%;
+display: block;
+/* display: none; */
+}
+/* .interactive-map .text-info.area-info-active {
+display: block;
+} */
+.interactive-map .text-info table {
+margin-top: 10px;
+}
+.interactive-map .text-info td {
+width: 15%;
+height: 30px;
+color: white;
+}
+.interactive-map .text-info td:first-child {
+font-weight: bold;
+}
+.interactive-map .text-info h2 {
+margin: 0;
+padding-bottom: 10px;
+border-bottom: 1px solid #7B848E;
+}
+.interactive-map #close-map {
+position: absolute;
+fill: #00e5ff;
+width: 45px;
+height: 45px;
+right: 2rem;
+top: 1rem;
+cursor: pointer;
+}
+.zoom-map-area {
+transform-origin: 0% 0%;
+position: relative;
+}
+
+
+
+
+
+.circle-marker {
+stroke: #00e5ff; 
+stroke-width: 4px;
+stroke-opacity: 1;
+}
+.circle-fill {
+fill: #00e5ff;
+}
+
+.circle-pulse {
+fill: #00e5ff;
+fill-opacity: 0;
+transform-origin: 50% 50%;
+transform-box: fill-box;
+animation-duration: 2s;
+animation-name: circle-pulsing;
+animation-iteration-count: infinite;
+}
+
+.visible-on-zoom .circle-marker {
+stroke: #ffe600; 
+stroke-width: 4px;
+stroke-opacity: 1;
+}
+.visible-on-zoom .circle-fill {
+fill: #ffe600;
+}
+.visible-on-zoom .circle-pulse {
+fill: #ffe600;
+}
+
+@keyframes circle-pulsing {
+from {
+stroke-width: 8px;
+stroke-opacity: 1;
+transform: scale(0.3);
+}
+to {
+stroke-width: 0;
+stroke-opacity: 0;
+transform: scale(2);
+}
+}
+
+
+/* .fill-me {
+position: relative;
+background-color: green;
+} */
+/* #area-one-zoom {
+position: absolute;
+top: 0;
+left: 0;
+z-index: 99999;
+} */
+
+
+.visible-on-zoom {
+visibility: hidden;
+}
+
+.svg-zoom {
+  transition: transform 0.3s ease-in-out;
+}
+
+.svg-zoom:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+/* Add CSS for the zooming-in transition */
+#svgContainer {
+  transition: transform 0.5s ease-in-out;
+}
+
+.zoomed-in {
+  transform: scale(2); /* Adjust the scale factor as needed */
 }

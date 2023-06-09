@@ -15,36 +15,40 @@ body{
     width: 250px;
     height: 200px;
     cursor: pointer; 
-    margin-left: 50px;
-    margin-top: 10px;
+    margin-left: 70px;
 }
-.navbar{
-    width: 95%;
+.navbar {
+    width: 100%;
     height: 100px;
     margin: auto;
     padding: 20px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #0054A5;
+  }
+  .navbar ul {
+    position: relative;
+  }
+  .navbar ul li:hover {
     background-color: #0054A5; /* added background color */
-}
-.navbar ul li:hover {
-    background-color: #0054A5; /* added background color */
-}
-.navbar ul li{
+  }
+  .navbar ul li {
     list-style: none;
     display: inline-block;
     margin: 0 20px;
     font-family: Poppins;
     position: relative;
-}
-.navbar ul li a{
+  }
+  .navbar ul li a {
     color: white;
     text-transform: uppercase;
     text-decoration: none;
     font-size: 120%;
-}
-.navbar ul li::after{
+    padding-right: 25px;
+  }
+  
+  .navbar ul li::after {
     content: '';
     height: 3px;
     width: 0;
@@ -53,13 +57,16 @@ body{
     bottom: -2px;
     background: white;
     transition: 0.5s;
-}
-.navbar ul li:hover::after{
-   width: 100%;
-}
-.navbar ul li:nth-child(6):hover {
+  }
+  
+  .navbar ul li:hover::after {
+    width: 80%;
+  }
+  
+  .navbar ul li:nth-child(6):hover {
     background-color: #0054A5;
-}
+  }
+  
 .homepage{
     width: 100%;
     position: absolute;
@@ -173,4 +180,45 @@ li:hover .dropdown {
       width: 200px;
     }
   }
+
+  @media only screen and (max-width: 768px) {
+    /* CSS code for small screen sizes */
+  
+    header {
+      height: 200px;
+    }
+  
+    .logo {
+      width: 150px;
+      height: 100px;
+      margin: 0px;
+    }
+  
+    .navbar ul li {
+      margin: 0 10px;
+      width: 30px;
+    }
+  
+    .homepage h1 {
+      font-size: 40px;
+      margin-top: 40px;
+    }
+  
+    .homepage h2 {
+      font-size: 30px;
+    }
+  
+    .homepage p {
+      font-size: 16px;
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+  
+    button {
+      font-size: 16px;
+      padding: 10px;
+      width: 200px;
+    }
+  }
+  
 

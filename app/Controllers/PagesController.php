@@ -255,24 +255,210 @@ class PagesController extends BaseController
     {
         $lotModel = new LotModel();
         $documentModel = new DocumentModel();
-
-
+    
         // Get the total area of all the lots
         $totalArea = $lotModel->db->query('SELECT SUM(size_of_area) AS total_area FROM lot_details')->getRow()->total_area;
-
+    
         // Get the total number of lots
         $totalLot = $lotModel->countAll();
         $totalDocs = $documentModel->countAll();
-
-        // Pass the calculated values to the view
+    
+        // Get the total number of land owners
+        $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+    
+        // Get the list of owner names
+        $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+    
+        // Pass the calculated values and owner names to the view
         $data['totalArea'] = $totalArea;
         $data['totalLot'] = $totalLot + $totalDocs;
         $data['totalLotNoDoc'] = $totalLot;
         $data['totalDocs'] = $totalDocs;
-
+        $data['totalLandOwners'] = $totalLandOwners;
+        $data['ownerNames'] = $ownerNames;
+    
         return view('reports', $data);
-    }  
+    }
 
+    public function ownernumber()
+{
+    $lotModel = new LotModel();
+    $documentModel = new DocumentModel();
+
+    // Get the total area of all the lots
+    $totalArea = $lotModel->db->query('SELECT SUM(size_of_area) AS total_area FROM lot_details')->getRow()->total_area;
+
+    // Get the total number of lots
+    $totalLot = $lotModel->countAll();
+    $totalDocs = $documentModel->countAll();
+
+    // Get the total number of land owners
+    $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the list of owner names
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+
+    // Pass the calculated values and owner names to the view
+    $data['totalArea'] = $totalArea;
+    $data['totalLot'] = $totalLot;
+    $data['totalLotNoDoc'] = $totalLot;
+    $data['totalDocs'] = $totalDocs;
+    $data['totalLandOwners'] = $totalLandOwners;
+    $data['ownerNames'] = $ownerNames;
+
+    return view('ownernumber', $data);
+}
+
+public function lotowned()
+{
+    $lotModel = new LotModel();
+    $documentModel = new DocumentModel();
+
+    // Get the total area of all the lots
+    $totalArea = $lotModel->db->query('SELECT SUM(size_of_area) AS total_area FROM lot_details')->getRow()->total_area;
+
+    // Get the total number of lots
+    $totalLot = $lotModel->countAll();
+    $totalDocs = $documentModel->countAll();
+
+    // Get the total number of land owners
+    $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the list of owner names
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+
+    $ownerLots = [];
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+    foreach ($ownerNames as $ownerName) {
+        $associatedLots = $lotModel->where('land_owner', $ownerName['land_owner'])->findAll();
+        $ownerLots[$ownerName['land_owner']] = $associatedLots;
+    }
+
+    // Pass the calculated values and owner names to the view
+    $data['totalArea'] = $totalArea;
+    $data['totalLot'] = $totalLot + $totalDocs;
+    $data['totalLotNoDoc'] = $totalLot;
+    $data['totalDocs'] = $totalDocs;
+    $data['totalLandOwners'] = $totalLandOwners;
+    $data['ownerNames'] = $ownerNames;
+    $data['totalLot'] = $totalLot;
+    $data['ownerLots'] = $ownerLots;
+
+    // Pass the associated lots to the view
+    $data['associatedLots'] = [];
+    foreach ($ownerNames as $ownerName) {
+        $associatedLots = $lotModel->where('land_owner', $ownerName['land_owner'])->findAll();
+        $data['associatedLots'][$ownerName['land_owner']] = $associatedLots;
+    }
+
+    return view('lotowned', $data);
+}
+
+public function totalarea()
+{
+    $lotModel = new LotModel();
+    $documentModel = new DocumentModel();
+
+    // Get the total number of lots
+    $totalLot = $lotModel->countAll();
+    $totalDocs = $documentModel->countAll();
+
+    // Get the total number of land owners
+    $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the list of owner names
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+
+    $ownerLots = [];
+    foreach ($ownerNames as $ownerName) {
+        $associatedLots = $lotModel->where('land_owner', $ownerName['land_owner'])->findAll();
+        $ownerLots[$ownerName['land_owner']] = $associatedLots;
+    }
+
+    // Calculate the total area owned by each land owner for each distinct lot
+    $totalAreas = [];
+    foreach ($ownerLots as $ownerName => $associatedLots) {
+        $lotAreas = [];
+        foreach ($associatedLots as $lot) {
+            $lotNo = $lot['lot_no'];
+            $sizeOfArea = str_replace('Sqm', '', $lot['size_of_area']); // Remove "Sqm" string
+            if (is_numeric($sizeOfArea)) {
+                $lotAreas[$lotNo] = isset($lotAreas[$lotNo]) ? $lotAreas[$lotNo] + floatval($sizeOfArea) : floatval($sizeOfArea);
+            }
+        }
+        $totalAreas[$ownerName] = $lotAreas;
+    }
+
+    // Get the total area of all the lots
+    $totalArea = 0;
+    foreach ($totalAreas as $lotAreas) {
+        $totalArea += array_sum($lotAreas);
+    }
+
+    $data['totalArea'] = $totalArea;
+    $data['totalLot'] = $totalLot + $totalDocs;
+    $data['totalLotNoDoc'] = $totalLot;
+    $data['totalDocs'] = $totalDocs;
+    $data['totalLandOwners'] = $totalLandOwners;
+    $data['ownerNames'] = $ownerNames;
+    $data['totalLot'] = $totalLot;
+    $data['ownerLots'] = $ownerLots;
+    $data['totalAreas'] = $totalAreas;
+
+    return view('totalarea', $data);
+}
+
+public function totaldoc()
+{
+    $lotModel = new LotModel();
+    $documentModel = new DocumentModel();
+
+    // Get the total number of lots
+    $totalLot = $lotModel->countAll();
+    $totalDocs = $documentModel->countAll();
+
+    // Get the total number of land owners
+    $totalLandOwners = $lotModel->distinct()->select('land_owner')->countAllResults();
+
+    // Get the list of owner names
+    $ownerNames = $lotModel->distinct()->select('land_owner')->findAll();
+
+    $ownerLots = [];
+    $totalAreas = [];
+    $totalArea = 0;
+
+    foreach ($ownerNames as $ownerName) {
+        $associatedLots = $lotModel->where('land_owner', $ownerName['land_owner'])->findAll();
+
+        foreach ($associatedLots as &$lot) {
+            $uploadedFiles = $documentModel->where('lot_id', $lot['id'])->findAll();
+            $lot['uploaded_files'] = !empty($uploadedFiles) ? $uploadedFiles : null;
+
+            $sizeOfArea = str_replace('Sqm', '', $lot['size_of_area']); // Remove "Sqm" string
+            if (is_numeric($sizeOfArea)) {
+                $lotNo = $lot['lot_no'];
+                $totalAreas[$ownerName['land_owner']][$lotNo] = isset($totalAreas[$ownerName['land_owner']][$lotNo]) ? $totalAreas[$ownerName['land_owner']][$lotNo] + floatval($sizeOfArea) : floatval($sizeOfArea);
+            }
+        }
+
+        $ownerLots[$ownerName['land_owner']] = $associatedLots;
+    }
+
+    foreach ($totalAreas as $lotAreas) {
+        $totalArea += array_sum($lotAreas);
+    }
+
+    $data['totalLot'] = $totalLot + $totalDocs;
+    $data['totalLotNoDoc'] = $totalLot;
+    $data['totalDocs'] = $totalDocs;
+    $data['totalLandOwners'] = $totalLandOwners;
+    $data['ownerNames'] = $ownerNames;
+    $data['totalLot'] = $totalLot;
+    $data['ownerLots'] = $ownerLots;
+    $data['totalArea'] = $totalArea;
+
+    return view('totaldoc', $data);
+}
     public function documents()
     {
         $lotModel = new LotModel();
@@ -298,8 +484,8 @@ class PagesController extends BaseController
     $validationRules = [
         'lot_no' => 'required|numeric|is_unique[lot_details.lot_no]',
         'cad_no' => 'numeric',
-        'size_of_area' => 'required|regex_match[/^\d{1,6} meters$/]',
-        'location' => 'required|alpha_numeric',
+        'size_of_area' => 'required|regex_match[/^\d{1,6} Sqm$/]',
+        'location' => 'required|regex_match[/^[a-zA-Z0-9\-,.\s]+$/]',
         'phase' => 'regex_match[/^[a-zA-Z0-9\s]{1,12}$/]',
         'land_owner' => 'required|max_length[18]',
         'status' => 'in_list[Active,Inactive,active,inactive]',
@@ -319,14 +505,13 @@ class PagesController extends BaseController
         ],
         'size_of_area' => [
             'required' => 'The Size of Area field is required.',
-            'regex_match' => 'The Size of Area field must be 6 digits followed by "meters".',
+            'regex_match' => 'The Size of Area field must be 6 digits followed by "Sqm".',
         ],
         'cad_no' => [
             'numeric' => 'The Cad Number field must be numeric.',
         ],
         'location' => [
-            'required' => 'The Location field is required.',
-            'alpha_numeric' => 'The Location field must contain only alphanumeric characters.',
+            'location.regex_match' => 'The location field can only contain letters, numbers, "-", ",", ".", and a space.'
         ],
         'phase' => [
             'regex_match' => 'The Phase field must be alphanumeric and have a maximum length of 12.',
@@ -488,17 +673,17 @@ public function update($lotId)
     if ($this->request->getMethod() === 'post') {
         $validationRules = [
             'cad_no' => 'numeric',
-            'size_of_area' => 'required|regex_match[/^\d{1,6} meters$/]',
-            'location' => 'required|alpha_numeric',
+            'size_of_area' => 'required|regex_match[/^\d{1,6} Sqm$/]',
+            'location' => 'required|regex_match[/^[a-zA-Z0-9\-,.\s]+$/]',
             'phase' => 'regex_match[/^[a-zA-Z0-9\s]{1,12}$/]',
             'land_owner' => 'required|max_length[18]',
             'status' => 'required|in_list[Active,Inactive,active,inactive]',
             'propertyDistances.*.bllm' => 'numeric|max_length[7]',
             'propertyDistances.*.distance_to_point1' => 'regex_match[/^\d{1,9} meters$/]',
-            'propertyValuations.*.valuation_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
-            'propertyValuations.*.tree_valuation_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
-            'propertyValuations.*.disturbance_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
-            'propertyValuations.*.house_structure_amount' => 'regex_match[/^PHP \d{1,10}(,\d{1,3})?$/]',
+            'propertyValuations.*.valuation_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
+            'propertyValuations.*.tree_valuation_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
+            'propertyValuations.*.disturbance_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
+            'propertyValuations.*.house_structure_amount' => 'regex_match[/^(PHP|Php) \d{1,10}(,\d{1,3})?$/]',
         ];
 
         $validationMessages = [
@@ -507,14 +692,13 @@ public function update($lotId)
             ],
             'size_of_area' => [
                 'required' => 'The Size of Area field is required.',
-                'regex_match' => 'The Size of Area field must be 6 digits followed by "meters".',
+                'regex_match' => 'The Size of Area field must be 6 digits followed by "Sqm".',
             ],
             'cad_no' => [
                 'numeric' => 'The Cad Number field must be numeric.',
             ],
             'location' => [
-                'required' => 'The Location field is required.',
-                'alpha_numeric' => 'The Location field must contain only alphanumeric characters.',
+                'location.regex_match' => 'The location field can only contain letters, numbers, "-", ",", ".", and a space.'
             ],
             'phase' => [
                 'regex_match' => 'The Phase field must be alphanumeric and have a maximum length of 12.',
@@ -535,16 +719,16 @@ public function update($lotId)
                 'regex_match' => 'The Distance to Point 1 field must be a numeric value followed by "meters".',
             ],
             'propertyValuations.*.valuation_amount' => [
-                'regex_match' => 'The Valuation Amount field must be in the format "PHP" followed by a numeric value with optional thousands separator.',
+                'regex_match' => 'The Valuation Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
             ],
             'propertyValuations.*.tree_valuation_amount' => [
-                'regex_match' => 'The Tree Valuation Amount field must be in the format "PHP" followed by a numeric value with optional thousands separator.',
+                'regex_match' => 'The Tree Valuation Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
             ],
             'propertyValuations.*.disturbance_amount' => [
-                'regex_match' => 'The Disturbance Amount field must be in the format "PHP" followed by a numeric value with optional thousands separator.',
+                'regex_match' => 'The Disturbance Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
             ],
             'propertyValuations.*.house_structure_amount' => [
-                'regex_match' => 'The House Structure Amount field must be in the format "PHP" followed by a numeric value with optional thousands separator.',
+                'regex_match' => 'The House Structure Amount field must be in the format "PHP or Php" followed by a numeric value with optional thousands separator.',
             ],
         ];
 
@@ -713,7 +897,7 @@ public function update($lotId)
         $lotModel->delete($id);
 
         // Redirect back to the land details page with success message
-        return redirect()->back()->with('success', 'Lot deleted successfully.');
+        return redirect()->to('/documents/')->with('success', 'Lot deleted successfully.');
     }
 
     public function deleteDocument($id)

@@ -17,33 +17,70 @@ body{
     cursor: pointer; 
     margin-left: 10px;
 }
-.navbar{
-    width: 95%;
+.navbar {
+    width: 100%;
     height: 100px;
     margin: auto;
     padding: 20px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #0054A5; /* added background color */
-}
-.navbar ul li:hover {
-    background-color: #0054A5; /* added background color */
-}
-.navbar ul li{
+    background-color: #0054A5;
+  }
+  
+  .navbar ul {
+    position: relative;
+  }
+  .navbar .dropdown {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: -50px;
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #0054A5;
+  }
+  .navbar li:hover .dropdown {
+    display: block;
+  }
+  .navbar .user {
+    width: 30px;
+    height: 30px;
+    margin-left: 3px;
+    margin-right: 0;
+  }
+  .navbar .logout-link {
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+  }
+  
+  .navbar .logout-link:hover {
+    background-color: #003977;
+  }
+  
+  .navbar ul li:hover {
+    background-color: #0054A5;
+  }
+  
+  .navbar ul li {
     list-style: none;
     display: inline-block;
     margin: 0 20px;
     font-family: Poppins;
     position: relative;
-}
-.navbar ul li a{
+  }
+  
+  .navbar ul li a {
     color: white;
     text-transform: uppercase;
     text-decoration: none;
     font-size: 120%;
-}
-.navbar ul li::after{
+    padding-right: 25px;
+  }
+  
+  .navbar ul li::after {
     content: '';
     height: 3px;
     width: 0;
@@ -52,13 +89,15 @@ body{
     bottom: -2px;
     background: white;
     transition: 0.5s;
-}
-.navbar ul li:hover::after{
-   width: 100%;
-}
-.navbar ul li:nth-child(6):hover {
+  }
+  
+  .navbar ul li:hover::after {
+    width: 100%;
+  }
+  
+  .navbar ul li:nth-child(6):hover {
     background-color: #0054A5;
-}
+  }
 .wrapper{
     width: 600px;
     padding: 2rem 1rem;
